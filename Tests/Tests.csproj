@@ -104,5 +104,8 @@
     </Content>
     <TypeScriptCompile Include="sprites\dynamic texture 2.ts" />
   </ItemGroup>
+  <ItemGroup>
+    <TypeScriptCompile Include="platformer\Lemonade.ts" />
+  </ItemGroup>
   <Import Project="$(VSToolsPath)\TypeScript\Microsoft.TypeScript.targets" />
 </Project>
