@@ -53,35 +53,29 @@
 
         if (myGame.input.keyboard.isDown(Keyboard.LEFT)) {
             andre.velocity.x = -100;
-
+            andre.animations.play('run', 12, true);
             // no facing attribute?
             //andre.scale.x = -1;
         }
         if (myGame.input.keyboard.isDown(Keyboard.RIGHT)) {
             andre.velocity.x = 100;
-            
+            andre.animations.play('run', 12, true);
             // no facing attribute
             //andre.scale.x = 1;
         }
-        if (myGame.input.keyboard.isDown(Keyboard.SPACEBAR)) {
+        if (myGame.input.keyboard.isDown(Keyboard.UP)) {
             andre.velocity.y = -500;
-        }
-
-        /*
-        if (andre.velocity.x == 0) {
             andre.animations.play('idle', 12, true);
         }
-        else {
-            andre.animations.play('run', 12, true);
-        }
-        */
+
+        
 
         myGame.collide(andre, block, collides);
 
     }
 
     function collides(a, b) {
-        andre.animations.play('idle', 12, true);
+        //andre.animations.play('idle', 12, true);
         console.log('Collision!!!!!');
 
     }
