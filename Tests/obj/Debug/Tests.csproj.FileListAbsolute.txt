@@ -1,0 +1,3 @@
+C:\Users\User\Documents\GitHub\phaser\Tests\obj\Debug\Tests.csprojResolveAssemblyReference.cache
+C:\Users\User\Documents\GitHub\phaser\Tests\obj\Debug\Tests.dll
+C:\Users\User\Documents\GitHub\phaser\Tests\obj\Debug\Tests.pdb
