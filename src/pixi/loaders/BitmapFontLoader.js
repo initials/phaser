@@ -17,43 +17,43 @@
 PIXI.BitmapFontLoader = function(url, crossorigin)
 {
     /*
-     * i use texture packer to load the assets..
-     * http://www.codeandweb.com/texturepacker
-     * make sure to set the format as "JSON"
-     */
+    * i use texture packer to load the assets..
+    * http://www.codeandweb.com/texturepacker
+    * make sure to set the format as "JSON"
+    */
     PIXI.EventTarget.call(this);
 
     /**
-     * The url of the bitmap font data
-     *
-     * @property url
-     * @type String
-     */
+    * The url of the bitmap font data
+    *
+    * @property url
+    * @type String
+    */
     this.url = url;
 
     /**
-     * Whether the requests should be treated as cross origin
-     *
-     * @property crossorigin
-     * @type Boolean
-     */
+    * Whether the requests should be treated as cross origin
+    *
+    * @property crossorigin
+    * @type Boolean
+    */
     this.crossorigin = crossorigin;
 
     /**
-     * [read-only] The base url of the bitmap font data
-     *
-     * @property baseUrl
-     * @type String
-     * @readOnly
-     */
+    * [read-only] The base url of the bitmap font data
+    *
+    * @property baseUrl
+    * @type String
+    * @readOnly
+    */
     this.baseUrl = url.replace(/[^\/]*$/, "");
 
     /**
-     * [read-only] The texture of the bitmap font
-     *
-     * @property baseUrl
-     * @type String
-     */
+    * [read-only] The texture of the bitmap font
+    *
+    * @property baseUrl
+    * @type String
+    */
     this.texture = null;
 };
 
@@ -110,20 +110,19 @@ PIXI.BitmapFontLoader.prototype.onXMLLoaded = function()
             {
                 var charCode = parseInt(letters[i].attributes.getNamedItem("id").nodeValue, 10);
 
-                var textureRect = {
-                    x: parseInt(letters[i].attributes.getNamedItem("x").nodeValue, 10),
-                    y: parseInt(letters[i].attributes.getNamedItem("y").nodeValue, 10),
-                    width: parseInt(letters[i].attributes.getNamedItem("width").nodeValue, 10),
-                    height: parseInt(letters[i].attributes.getNamedItem("height").nodeValue, 10)
-                };
-                PIXI.TextureCache[charCode] = new PIXI.Texture(this.texture, textureRect);
+                var textureRect = new PIXI.Rectangle(
+                    parseInt(letters[i].attributes.getNamedItem("x").nodeValue, 10),
+                    parseInt(letters[i].attributes.getNamedItem("y").nodeValue, 10),
+                    parseInt(letters[i].attributes.getNamedItem("width").nodeValue, 10),
+                    parseInt(letters[i].attributes.getNamedItem("height").nodeValue, 10)
+                );
 
                 data.chars[charCode] = {
                     xOffset: parseInt(letters[i].attributes.getNamedItem("xoffset").nodeValue, 10),
                     yOffset: parseInt(letters[i].attributes.getNamedItem("yoffset").nodeValue, 10),
                     xAdvance: parseInt(letters[i].attributes.getNamedItem("xadvance").nodeValue, 10),
                     kerning: {},
-                    texture:new PIXI.Texture(this.texture, textureRect)
+                    texture: PIXI.TextureCache[charCode] = new PIXI.Texture(this.texture, textureRect)
 
                 };
             }

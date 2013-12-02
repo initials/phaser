@@ -5,14 +5,17 @@
 */
 
 /**
-* Create a new `Button` object. A Button is a special type of Sprite that is set-up to handle Pointer events automatically. The four states a Button responds to are:
-* 'Over' - when the Pointer moves over the Button. This is also commonly known as 'hover'.
-* 'Out' - when the Pointer that was previously over the Button moves out of it.
-* 'Down' - when the Pointer is pressed down on the Button. I.e. touched on a touch enabled device or clicked with the mouse.
-* 'Up' - when the Pointer that was pressed down on the Button is released again.
+* @class Phaser.Button
+*
+* @classdesc Create a new `Button` object. A Button is a special type of Sprite that is set-up to handle Pointer events automatically. The four states a Button responds to are:
+*
+* * 'Over' - when the Pointer moves over the Button. This is also commonly known as 'hover'.
+* * 'Out' - when the Pointer that was previously over the Button moves out of it.
+* * 'Down' - when the Pointer is pressed down on the Button. I.e. touched on a touch enabled device or clicked with the mouse.
+* * 'Up' - when the Pointer that was pressed down on the Button is released again.
+*
 * You can set a unique texture frame and Sound for any of these states.
 *
-* @class Phaser.Button
 * @constructor
 *
 * @param {Phaser.Game} game Current game instance.
@@ -33,67 +36,67 @@ Phaser.Button = function (game, x, y, key, callback, callbackContext, overFrame,
     callback = callback || null;
     callbackContext = callbackContext || this;
 
-	Phaser.Sprite.call(this, game, x, y, key, outFrame);
+    Phaser.Sprite.call(this, game, x, y, key, outFrame);
 
-	/** 
-	* @property {number} type - The Phaser Object Type.
-	*/
+    /** 
+    * @property {number} type - The Phaser Object Type.
+    */
     this.type = Phaser.BUTTON;
 
-	/** 
-	* @property {string} _onOverFrameName - Internal variable.
-	* @private
-	* @default
-	*/
+    /** 
+    * @property {string} _onOverFrameName - Internal variable.
+    * @private
+    * @default
+    */
     this._onOverFrameName = null;
     
-	/** 
-	* @property {string} _onOutFrameName - Internal variable.
-	* @private
-	* @default
-	*/
+    /** 
+    * @property {string} _onOutFrameName - Internal variable.
+    * @private
+    * @default
+    */
     this._onOutFrameName = null;
     
-	/** 
-	* @property {string} _onDownFrameName - Internal variable.
-	* @private
-	* @default
-	*/
+    /** 
+    * @property {string} _onDownFrameName - Internal variable.
+    * @private
+    * @default
+    */
     this._onDownFrameName = null;
     
-	/** 
-	* @property {string} _onUpFrameName - Internal variable.
-	* @private
-	* @default
-	*/
+    /** 
+    * @property {string} _onUpFrameName - Internal variable.
+    * @private
+    * @default
+    */
     this._onUpFrameName = null;
     
-	/** 
-	* @property {number} _onOverFrameID - Internal variable.
-	* @private
-	* @default
-	*/
+    /** 
+    * @property {number} _onOverFrameID - Internal variable.
+    * @private
+    * @default
+    */
     this._onOverFrameID = null;
     
-	/** 
-	* @property {number} _onOutFrameID - Internal variable.
-	* @private
-	* @default
-	*/
+    /** 
+    * @property {number} _onOutFrameID - Internal variable.
+    * @private
+    * @default
+    */
     this._onOutFrameID = null;
     
-	/** 
-	* @property {number} _onDownFrameID - Internal variable.
-	* @private
-	* @default
-	*/
+    /** 
+    * @property {number} _onDownFrameID - Internal variable.
+    * @private
+    * @default
+    */
     this._onDownFrameID = null;
     
-	/** 
-	* @property {number} _onUpFrameID - Internal variable.
-	* @private
-	* @default
-	*/
+    /** 
+    * @property {number} _onUpFrameID - Internal variable.
+    * @private
+    * @default
+    */
     this._onUpFrameID = null;
 
     /** 
@@ -144,30 +147,37 @@ Phaser.Button = function (game, x, y, key, callback, callbackContext, overFrame,
     */
     this.onUpSoundMarker = '';
 
-	/** 
-	* @property {Phaser.Signal} onInputOver - The Signal (or event) dispatched when this Button is in an Over state.
-	*/
-    this.onInputOver = new Phaser.Signal;
+    /** 
+    * @property {Phaser.Signal} onInputOver - The Signal (or event) dispatched when this Button is in an Over state.
+    */
+    this.onInputOver = new Phaser.Signal();
     
-	/** 
-	* @property {Phaser.Signal} onInputOut - The Signal (or event) dispatched when this Button is in an Out state.
-	*/
-    this.onInputOut = new Phaser.Signal;
+    /** 
+    * @property {Phaser.Signal} onInputOut - The Signal (or event) dispatched when this Button is in an Out state.
+    */
+    this.onInputOut = new Phaser.Signal();
     
-	/** 
-	* @property {Phaser.Signal} onInputDown - The Signal (or event) dispatched when this Button is in an Down state.
-	*/
-    this.onInputDown = new Phaser.Signal;
+    /** 
+    * @property {Phaser.Signal} onInputDown - The Signal (or event) dispatched when this Button is in an Down state.
+    */
+    this.onInputDown = new Phaser.Signal();
     
-	/** 
-	* @property {Phaser.Signal} onInputUp - The Signal (or event) dispatched when this Button is in an Up state.
-	*/
-    this.onInputUp = new Phaser.Signal;
+    /** 
+    * @property {Phaser.Signal} onInputUp - The Signal (or event) dispatched when this Button is in an Up state.
+    */
+    this.onInputUp = new Phaser.Signal();
 
     /** 
     * @property {boolean} freezeFrames - When true the Button will cease to change texture frame on all events (over, out, up, down).
     */
     this.freezeFrames = false;
+
+    /**
+    * When the Button is clicked you can optionally force the state to "out".
+    * @property {boolean} forceOut
+    * @default
+    */
+    this.forceOut = true;
 
     this.setFrames(overFrame, outFrame, downFrame);
 
@@ -230,7 +240,7 @@ Phaser.Button.prototype.setFrames = function (overFrame, outFrame, downFrame) {
             this._onOutFrameName = outFrame;
             this._onUpFrameName = outFrame;
 
-            if (this.input.pointerOver() == false)
+            if (this.input.pointerOver() === false)
             {
                 this.frameName = outFrame;
             }
@@ -240,7 +250,7 @@ Phaser.Button.prototype.setFrames = function (overFrame, outFrame, downFrame) {
             this._onOutFrameID = outFrame;
             this._onUpFrameID = outFrame;
 
-            if (this.input.pointerOver() == false)
+            if (this.input.pointerOver() === false)
             {
                 this.frame = outFrame;
             }
@@ -253,7 +263,7 @@ Phaser.Button.prototype.setFrames = function (overFrame, outFrame, downFrame) {
         {
             this._onDownFrameName = downFrame;
 
-            if (this.input.pointerOver())
+            if (this.input.pointerDown())
             {
                 this.frameName = downFrame;
             }
@@ -262,7 +272,7 @@ Phaser.Button.prototype.setFrames = function (overFrame, outFrame, downFrame) {
         {
             this._onDownFrameID = downFrame;
 
-            if (this.input.pointerOver())
+            if (this.input.pointerDown())
             {
                 this.frame = downFrame;
             }
@@ -400,7 +410,7 @@ Phaser.Button.prototype.setDownSound = function (sound, marker) {
 */
 Phaser.Button.prototype.onInputOverHandler = function (pointer) {
 
-    if (this.freezeFrames == false)
+    if (this.freezeFrames === false)
     {
         if (this._onOverFrameName != null)
         {
@@ -432,7 +442,7 @@ Phaser.Button.prototype.onInputOverHandler = function (pointer) {
 */
 Phaser.Button.prototype.onInputOutHandler = function (pointer) {
 
-    if (this.freezeFrames == false)
+    if (this.freezeFrames === false)
     {
         if (this._onOutFrameName != null)
         {
@@ -464,7 +474,7 @@ Phaser.Button.prototype.onInputOutHandler = function (pointer) {
 */
 Phaser.Button.prototype.onInputDownHandler = function (pointer) {
 
-    if (this.freezeFrames == false)
+    if (this.freezeFrames === false)
     {
         if (this._onDownFrameName != null)
         {
@@ -496,7 +506,7 @@ Phaser.Button.prototype.onInputDownHandler = function (pointer) {
 */
 Phaser.Button.prototype.onInputUpHandler = function (pointer) {
 
-    if (this.freezeFrames == false)
+    if (this.freezeFrames === false)
     {
         if (this._onUpFrameName != null)
         {
@@ -513,8 +523,21 @@ Phaser.Button.prototype.onInputUpHandler = function (pointer) {
         this.onUpSound.play(this.onUpSoundMarker);
     }
 
+    if (this.forceOut && this.freezeFrames === false)
+    {
+        if (this._onOutFrameName != null)
+        {
+            this.frameName = this._onOutFrameName;
+        }
+        else if (this._onOutFrameID != null)
+        {
+            this.frame = this._onOutFrameID;
+        }
+    }
+
     if (this.onInputUp)
     {
         this.onInputUp.dispatch(this, pointer);
     }
+
 };

@@ -17,26 +17,26 @@
 Phaser.Stage = function (game, width, height) {
 
     /**
-	* @property {Phaser.Game} game - A reference to the currently running Game.
-	*/
-	this.game = game;
+    * @property {Phaser.Game} game - A reference to the currently running Game.
+    */
+    this.game = game;
 
     /**
-	* @property {string} game - Background color of the stage (defaults to black). Set via the public backgroundColor property.
-	* @private
-	* @default 'rgb(0,0,0)'
-	*/
+    * @property {string} game - Background color of the stage (defaults to black). Set via the public backgroundColor property.
+    * @private
+    * @default 'rgb(0,0,0)'
+    */
     this._backgroundColor = 'rgb(0,0,0)';
 
     /**
-	* @property {Phaser.Point} offset - Get the offset values (for input and other things).
-	*/
-	this.offset = new Phaser.Point;
+    * @property {Phaser.Point} offset - Get the offset values (for input and other things).
+    */
+    this.offset = new Phaser.Point();
     
     /**
     * @property {HTMLCanvasElement} canvas - Reference to the newly created &lt;canvas&gt; element.
     */
-    this.canvas = Phaser.Canvas.create(width, height); 
+    this.canvas = Phaser.Canvas.create(width, height);
     this.canvas.style['-webkit-full-screen'] = 'width: 100%; height: 100%';
     
     /**
@@ -45,10 +45,11 @@ Phaser.Stage = function (game, width, height) {
     */
     this._stage = new PIXI.Stage(0x000000, false);
     this._stage.name = '_stage_root';
+    this._stage.interactive = false;
 
     /**
     * @property {number} scaleMode - The current scaleMode.
-    */    
+    */
     this.scaleMode = Phaser.StageScaleMode.NO_SCALE;
 
     /**
@@ -57,8 +58,8 @@ Phaser.Stage = function (game, width, height) {
     this.scale = new Phaser.StageScaleMode(this.game, width, height);
 
     /**
-     * @property {number} aspectRatio - Aspect ratio.
-     */
+    * @property {number} aspectRatio - Aspect ratio.
+    */
     this.aspectRatio = width / height;
 
     /**
@@ -97,6 +98,8 @@ Phaser.Stage.prototype = {
         Phaser.Canvas.setUserSelect(this.canvas, 'none');
         Phaser.Canvas.setTouchAction(this.canvas, 'none');
 
+        this.backgroundColor = '#000';
+
         document.addEventListener('visibilitychange', this._onChange, false);
         document.addEventListener('webkitvisibilitychange', this._onChange, false);
         document.addEventListener('pagehide', this._onChange, false);
@@ -125,7 +128,7 @@ Phaser.Stage.prototype = {
 
     },
 
-	/**
+    /**
     * This method is called when the document visibility is changed.
     * @method Phaser.Stage#visibilityChange
     * @param {Event} event - Its type will be used to decide whether the game should be paused or not.
@@ -137,16 +140,16 @@ Phaser.Stage.prototype = {
             return;
         }
 
-        if (event.type == 'pagehide' || event.type == 'blur' || document['hidden'] == true || document['webkitHidden'] == true)
+        if (event.type == 'pagehide' || event.type == 'blur' || document['hidden'] === true || document['webkitHidden'] === true)
         {
-	        this.game.paused = true;
+            this.game.paused = true;
         }
         else
         {
-	        this.game.paused = false;
+            this.game.paused = false;
         }
 
-    },
+    }
 
 };
 
@@ -164,19 +167,23 @@ Object.defineProperty(Phaser.Stage.prototype, "backgroundColor", {
 
         this._backgroundColor = color;
 
-        if (this.game.renderType == Phaser.CANVAS)
+        if (this.game.transparent === false)
         {
-            //  Set it directly, this allows us to use rgb alpha values in Canvas mode.
-            this._stage.backgroundColorString = color;
-        }
-        else
-        {
-            if (typeof color === 'string')
+            if (this.game.renderType == Phaser.CANVAS)
             {
-                color = Phaser.Color.hexToRGB(color);
+                //  Set it directly, this allows us to use rgb alpha values in Canvas mode.
+                this.game.canvas.style.backgroundColor = color;
+            }
+            else
+            {
+                if (typeof color === 'string')
+                {
+                    color = Phaser.Color.hexToRGB(color);
+                }
+
+                this._stage.setBackgroundColor(color);
             }
 
-            this._stage.setBackgroundColor(color);
         }
 
     }

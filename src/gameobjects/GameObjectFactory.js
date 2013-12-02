@@ -14,14 +14,14 @@
 Phaser.GameObjectFactory = function (game) {
 
     /**
-	* @property {Phaser.Game} game - A reference to the currently running Game.
-	*/
-	this.game = game;
-	
+    * @property {Phaser.Game} game - A reference to the currently running Game.
+    */
+    this.game = game;
+    
     /**
-	* @property {Phaser.World} world - A reference to the game world.
-	*/
-	this.world = this.game.world;
+    * @property {Phaser.World} world - A reference to the game world.
+    */
+    this.world = this.game.world;
 
 };
 
@@ -39,7 +39,7 @@ Phaser.GameObjectFactory.prototype = {
 
     },
 
-	/**
+    /**
     * Create a new Sprite with specific position and sprite sheet key.
     *
     * @method Phaser.GameObjectFactory#sprite
@@ -100,32 +100,33 @@ Phaser.GameObjectFactory.prototype = {
     },
 
     /**
-     * Creates a new instance of the Sound class.
-     *
+    * Creates a new instance of the Sound class.
+    *
     * @method Phaser.GameObjectFactory#audio
-     * @param {string} key - The Game.cache key of the sound that this object will use.
-     * @param {number} volume - The volume at which the sound will be played.
-     * @param {boolean} loop - Whether or not the sound will loop.
-     * @return {Phaser.Sound} The newly created text object.
-     */
-    audio: function (key, volume, loop) {
+    * @param {string} key - The Game.cache key of the sound that this object will use.
+    * @param {number} [volume=1] - The volume at which the sound will be played.
+    * @param {boolean} [loop=false] - Whether or not the sound will loop.
+    * @param {boolean} [connect=true] - Controls if the created Sound object will connect to the master gainNode of the SoundManager when running under WebAudio.
+    * @return {Phaser.Sound} The newly created text object.
+    */
+    audio: function (key, volume, loop, connect) {
 
-        return this.game.sound.add(key, volume, loop);
+        return this.game.sound.add(key, volume, loop, connect);
         
     },
 
     /**
-     * Creates a new <code>TileSprite</code>.
-     *
+    * Creates a new <code>TileSprite</code>.
+    *
     * @method Phaser.GameObjectFactory#tileSprite
-     * @param {number} x - X position of the new tileSprite.
-     * @param {number} y - Y position of the new tileSprite.
-     * @param {number} width - the width of the tilesprite.
-     * @param {number} height - the height of the tilesprite.
-     * @param {string|Phaser.RenderTexture|PIXI.Texture} key - This is the image or texture used by the Sprite during rendering. It can be a string which is a reference to the Cache entry, or an instance of a RenderTexture or PIXI.Texture.
-     * @param {string|number} frame - If this Sprite is using part of a sprite sheet or texture atlas you can specify the exact frame to use by giving a string or numeric index.
-     * @return {Phaser.TileSprite} The newly created tileSprite object.
-     */
+    * @param {number} x - X position of the new tileSprite.
+    * @param {number} y - Y position of the new tileSprite.
+    * @param {number} width - the width of the tilesprite.
+    * @param {number} height - the height of the tilesprite.
+    * @param {string|Phaser.RenderTexture|PIXI.Texture} key - This is the image or texture used by the Sprite during rendering. It can be a string which is a reference to the Cache entry, or an instance of a RenderTexture or PIXI.Texture.
+    * @param {string|number} frame - If this Sprite is using part of a sprite sheet or texture atlas you can specify the exact frame to use by giving a string or numeric index.
+    * @return {Phaser.TileSprite} The newly created tileSprite object.
+    */
     tileSprite: function (x, y, width, height, key, frame) {
 
         return this.world.add(new Phaser.TileSprite(this.game, x, y, width, height, key, frame));
@@ -133,15 +134,15 @@ Phaser.GameObjectFactory.prototype = {
     },
 
     /**
-     * Creates a new <code>Text</code>.
-     *
+    * Creates a new <code>Text</code>.
+    *
     * @method Phaser.GameObjectFactory#text
-     * @param {number} x - X position of the new text object.
-     * @param {number} y - Y position of the new text object.
-     * @param {string} text - The actual text that will be written.
-     * @param {object} style - The style object containing style attributes like font, font size , etc.
-     * @return {Phaser.Text} The newly created text object.
-     */
+    * @param {number} x - X position of the new text object.
+    * @param {number} y - Y position of the new text object.
+    * @param {string} text - The actual text that will be written.
+    * @param {object} style - The style object containing style attributes like font, font size , etc.
+    * @return {Phaser.Text} The newly created text object.
+    */
     text: function (x, y, text, style) {
 
         return this.world.add(new Phaser.Text(this.game, x, y, text, style));
@@ -169,13 +170,13 @@ Phaser.GameObjectFactory.prototype = {
     },
 
     /**
-     * Creates a new <code>Graphics</code> object.
-     *
+    * Creates a new <code>Graphics</code> object.
+    *
     * @method Phaser.GameObjectFactory#graphics
-     * @param {number} x - X position of the new graphics object.
-     * @param {number} y - Y position of the new graphics object.
-     * @return {Phaser.Graphics} The newly created graphics object.
-     */
+    * @param {number} x - X position of the new graphics object.
+    * @param {number} y - Y position of the new graphics object.
+    * @return {Phaser.Graphics} The newly created graphics object.
+    */
     graphics: function (x, y) {
 
         return this.world.add(new Phaser.Graphics(this.game, x, y));
@@ -273,6 +274,40 @@ Phaser.GameObjectFactory.prototype = {
         this.game.cache.addRenderTexture(key, texture);
 
         return texture;
+
+    },
+
+    /**
+    * A BitmapData object which can be manipulated and drawn to like a traditional Canvas object and used to texture Sprites.
+    *
+    * @method Phaser.GameObjectFactory#bitmapData
+    * @param {number} [width=256] - The width of the BitmapData in pixels.
+    * @param {number} [height=256] - The height of the BitmapData in pixels.
+    * @return {Phaser.BitmapData} The newly created BitmapData object.
+    */
+    bitmapData: function (width, height) {
+
+        return new Phaser.BitmapData(this.game, width, height);
+
+    },
+
+    /**
+    * A WebGL shader/filter that can be applied to Sprites.
+    *
+    * @method Phaser.GameObjectFactory#filter
+    * @param {string} filter - The name of the filter you wish to create, for example HueRotate or SineWave.
+    * @param {any} - Whatever parameters are needed to be passed to the filter init function.
+    * @return {Phaser.Filter} The newly created Phaser.Filter object.
+    */
+    filter: function (filter) {
+
+        var args = Array.prototype.splice.call(arguments, 1);
+
+        var filter = new Phaser.Filter[filter](this.game);
+
+        filter.init.apply(filter, args);
+
+        return filter;
 
     }
 

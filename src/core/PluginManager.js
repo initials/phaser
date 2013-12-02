@@ -1,3 +1,5 @@
+/* jshint newcap: false */
+
 /**
 * @author       Richard Davey <rich@photonstorm.com>
 * @copyright    2013 Photon Storm Ltd.
@@ -5,7 +7,7 @@
 */
 
 /** 
-* Description.
+* The Plugin Manager is responsible for the loading, running and unloading of Phaser Plugins.
 * 
 * @class Phaser.PluginManager
 * @classdesc Phaser - PluginManager
@@ -15,27 +17,27 @@
 */
 Phaser.PluginManager = function(game, parent) {
 
-	/**
-	* @property {Phaser.Game} game - A reference to the currently running game.
-	*/
+    /**
+    * @property {Phaser.Game} game - A reference to the currently running game.
+    */
     this.game = game;
     
     /**
-	* @property {Description} _parent - Description.
-	* @private
-	*/
+    * @property {Description} _parent - Description.
+    * @private
+    */
     this._parent = parent;
     
     /**
-	* @property {array} plugins - Description.
-	*/
+    * @property {array} plugins - Description.
+    */
     this.plugins = [];
     
     /**
-	* @property {array} _pluginsLength - Description.
-	* @private
-	* @default
-	*/
+    * @property {array} _pluginsLength - Description.
+    * @private
+    * @default
+    */
     this._pluginsLength = 0;
 
 };
@@ -77,6 +79,12 @@ Phaser.PluginManager.prototype = {
             result = true;
         }
 
+        if (typeof plugin['postUpdate'] === 'function')
+        {
+            plugin.hasPostUpdate = true;
+            result = true;
+        }
+
         if (typeof plugin['render'] === 'function')
         {
             plugin.hasRender = true;
@@ -92,7 +100,7 @@ Phaser.PluginManager.prototype = {
         //  The plugin must have at least one of the above functions to be added to the PluginManager.
         if (result)
         {
-            if (plugin.hasPreUpdate || plugin.hasUpdate)
+            if (plugin.hasPreUpdate || plugin.hasUpdate || plugin.hasPostUpdate)
             {
                 plugin.active = true;
             }
@@ -119,15 +127,41 @@ Phaser.PluginManager.prototype = {
     },
 
     /**
-     * Remove a Plugin from the PluginManager.
-     * @method Phaser.PluginManager#remove
-     * @param {Phaser.Plugin} plugin - The plugin to be removed.
-     */
+    * Remove a Plugin from the PluginManager.
+    * @method Phaser.PluginManager#remove
+    * @param {Phaser.Plugin} plugin - The plugin to be removed.
+    */
     remove: function (plugin) {
+        
+        if (this._pluginsLength === 0)
+        {
+            return;
+        }
 
-        //  TODO
-        this._pluginsLength--;
+        for (this._p = 0; this._p < this._pluginsLength; this._p++)
+        {
+            if (this.plugins[this._p] === plugin)
+            {
+                plugin.destroy();
+                this.plugins.splice(this._p, 1);
+                this._pluginsLength--;
+                return;
+            }
+        }
+    },
 
+    /**
+    * Removes all Plugins from the PluginManager.
+    * @method Phaser.PluginManager#removeAll
+    */
+    removeAll: function() {
+        
+        for (this._p = 0; this._p < this._pluginsLength; this._p++)
+        {
+            this.plugins[this._p].destroy();
+        }
+        this.plugins.length = 0;
+        this._pluginsLength = 0;
     },
 
     /**
@@ -138,7 +172,7 @@ Phaser.PluginManager.prototype = {
     */
     preUpdate: function () {
 
-        if (this._pluginsLength == 0)
+        if (this._pluginsLength === 0)
         {
             return;
         }
@@ -161,7 +195,7 @@ Phaser.PluginManager.prototype = {
     */
     update: function () {
         
-        if (this._pluginsLength == 0)
+        if (this._pluginsLength === 0)
         {
             return;
         }
@@ -177,6 +211,30 @@ Phaser.PluginManager.prototype = {
     },
 
     /**
+    * PostUpdate is the last thing to be called before the world render.
+    * In particular, it is called after the world postUpdate, which means the camera has been adjusted.
+    * It only calls plugins who have active=true.
+    * 
+    * @method Phaser.PluginManager#postUpdate
+    */
+    postUpdate: function () {
+        
+        if (this._pluginsLength === 0)
+        {
+            return;
+        }
+
+        for (this._p = 0; this._p < this._pluginsLength; this._p++)
+        {
+            if (this.plugins[this._p].active && this.plugins[this._p].hasPostUpdate)
+            {
+                this.plugins[this._p].postUpdate();
+            }
+        }
+
+    },
+
+    /**
     * Render is called right after the Game Renderer completes, but before the State.render.
     * It only calls plugins who have visible=true.
     * 
@@ -184,7 +242,7 @@ Phaser.PluginManager.prototype = {
     */
     render: function () {
 
-        if (this._pluginsLength == 0)
+        if (this._pluginsLength === 0)
         {
             return;
         }
@@ -207,7 +265,7 @@ Phaser.PluginManager.prototype = {
     */
     postRender: function () {
 
-        if (this._pluginsLength == 0)
+        if (this._pluginsLength === 0)
         {
             return;
         }

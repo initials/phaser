@@ -40,10 +40,10 @@ Phaser.Canvas = {
     * @param {HTMLElement} element - The targeted element that we want to retrieve the offset.
     * @param {Phaser.Point} [point] - The point we want to take the x/y values of the offset.
     * @return {Phaser.Point} - A point objet with the offsetX and Y as its properties.
-    */    
+    */
     getOffset: function (element, point) {
 
-        point = point || new Phaser.Point;
+        point = point || new Phaser.Point();
 
         var box = element.getBoundingClientRect();
         var clientTop = element.clientTop || document.body.clientTop || 0;
@@ -64,7 +64,7 @@ Phaser.Canvas = {
     * @method Phaser.Canvas.getAspectRatio
     * @param {HTMLCanvasElement} canvas - The canvas to get the aspect ratio from.
     * @return {number} The ratio between canvas' width and height.
-    */        
+    */
     getAspectRatio: function (canvas) {
         return canvas.width / canvas.height;
     },
@@ -137,36 +137,42 @@ Phaser.Canvas = {
     *
     * @method Phaser.Canvas.addToDOM
     * @param {HTMLCanvasElement} canvas - The canvas to set the touch action on.
-    * @param {string} parent - The DOM element to add the canvas to. Defaults to ''.
+    * @param {string|HTMLElement} parent - The DOM element to add the canvas to. Defaults to ''.
     * @param {boolean} overflowHidden - If set to true it will add the overflow='hidden' style to the parent DOM element.
     * @return {HTMLCanvasElement} Returns the source canvas.
     */
     addToDOM: function (canvas, parent, overflowHidden) {
 
-        parent = parent || '';
+        var target;
 
         if (typeof overflowHidden === 'undefined') { overflowHidden = true; }
 
-        if (parent !== '')
+        if (parent)
         {
-            if (document.getElementById(parent))
+            // hopefully an element ID
+            if (typeof parent === 'string')
             {
-                document.getElementById(parent).appendChild(canvas);
+                target = document.getElementById(parent);
+            }
+            // quick test for a HTMLelement
+            else if (typeof parent === 'object' && parent.nodeType === 1)
+            {
+                target = parent;
+            }
 
-                if (overflowHidden)
-                {
-                    document.getElementById(parent).style.overflow = 'hidden';
-                }
-            }
-            else
+            if (overflowHidden)
             {
-                document.body.appendChild(canvas);
+                target.style.overflow = 'hidden';
             }
         }
-        else
+
+        // fallback, covers an invalid ID and a none HTMLelement object
+        if(!target)
         {
-            document.body.appendChild(canvas);
+            target = document.body;
         }
+
+        target.appendChild(canvas);
 
         return canvas;
 

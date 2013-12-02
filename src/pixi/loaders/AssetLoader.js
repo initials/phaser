@@ -24,26 +24,26 @@ PIXI.AssetLoader = function(assetURLs, crossorigin)
 
 	/**
 	 * The array of asset URLs that are going to be loaded
-     *
+    *
 	 * @property assetURLs
 	 * @type Array<String>
 	 */
 	this.assetURLs = assetURLs;
 
     /**
-     * Whether the requests should be treated as cross origin
-     *
-     * @property crossorigin
-     * @type Boolean
-     */
+    * Whether the requests should be treated as cross origin
+    *
+    * @property crossorigin
+    * @type Boolean
+    */
 	this.crossorigin = crossorigin;
 
     /**
-     * Maps file extension to loader types
-     *
-     * @property loadersByType
-     * @type Object
-     */
+    * Maps file extension to loader types
+    *
+    * @property loadersByType
+    * @type Object
+    */
     this.loadersByType = {
         "jpg":  PIXI.ImageLoader,
         "jpeg": PIXI.ImageLoader,
@@ -54,8 +54,8 @@ PIXI.AssetLoader = function(assetURLs, crossorigin)
         "xml":  PIXI.BitmapFontLoader,
         "fnt":  PIXI.BitmapFontLoader
     };
-    
-    
+
+
 };
 
 /**
@@ -65,7 +65,7 @@ PIXI.AssetLoader = function(assetURLs, crossorigin)
 
 /**
  * Fired when all the assets have loaded
- * @event onComplete 
+ * @event onComplete
  */
 
 // constructor
@@ -85,7 +85,7 @@ PIXI.AssetLoader.prototype.load = function()
     for (var i=0; i < this.assetURLs.length; i++)
 	{
 		var fileName = this.assetURLs[i];
-		var fileType = fileName.split(".").pop().toLowerCase();
+		var fileType = fileName.split("?").shift().split(".").pop().toLowerCase();
 
         var loaderClass = this.loadersByType[fileType];
         if(!loaderClass)
@@ -112,8 +112,8 @@ PIXI.AssetLoader.prototype.onAssetLoaded = function()
     this.loadCount--;
 	this.dispatchEvent({type: "onProgress", content: this});
 	if(this.onProgress) this.onProgress();
-	
-	if(this.loadCount == 0)
+
+	if(this.loadCount === 0)
 	{
 		this.dispatchEvent({type: "onComplete", content: this});
 		if(this.onComplete) this.onComplete();

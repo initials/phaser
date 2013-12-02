@@ -2,26 +2,25 @@
 * @author       Richard Davey <rich@photonstorm.com>
 * @copyright    2013 Photon Storm Ltd.
 * @license      {@link https://github.com/photonstorm/phaser/blob/master/license.txt|MIT License}
-* @module       Phaser.Tile
 */
 
-
 /**
-* Create a new <code>Tile</code>.
+* Create a new `Tile` object. Tiles live inside of Tilesets and are rendered via TilemapLayers.
 *
 * @class Phaser.Tile
 * @classdesc A Tile is a single representation of a tile within a Tilemap.
 * @constructor
-* @param {Phaser.Game} game - A reference to the currently running game.
-* @param {Tilemap} tilemap - The tilemap this tile belongs to.
-* @param {number}  index - The index of this tile type in the core map data.
-* @param {number}  width - Width of the tile.
-* @param {number}  height - Height of the tile.
+* @param {Phaser.Tileset} tileset - The tileset this tile belongs to.
+* @param {number} index - The index of this tile type in the core map data.
+* @param {number} x - The x coordinate of this tile.
+* @param {number} y - The y coordinate of this tile.
+* @param {number} width - Width of the tile.
+* @param {number} height - Height of the tile.
 */
 Phaser.Tile = function (tileset, index, x, y, width, height) {
 
     /**
-    * @property {string} tileset - The tileset this tile belongs to.
+    * @property {Phaser.Tileset} tileset - The tileset this tile belongs to.
     */
     this.tileset = tileset;
     
@@ -119,7 +118,7 @@ Phaser.Tile.prototype = {
     /**
     * Set callback to be called when this tilemap collides.
     * 
-    * @method Phaser.Tilemap.prototype.setCollisionCallback
+    * @method Phaser.Tile#setCollisionCallback
     * @param {Function} callback - Callback function.
     * @param {object} context - Callback will be called with this context.
     */
@@ -132,7 +131,7 @@ Phaser.Tile.prototype = {
 
     /**
     * Clean up memory.
-    * @method destroy
+    * @method Phaser.Tile#destroy
     */
     destroy: function () {
 
@@ -141,15 +140,12 @@ Phaser.Tile.prototype = {
     },
 
     /**
-    * Set collision configs.
-    * @method setCollision
-    * @param {boolean}   left - Indicating collide with any object on the left.
-    * @param {boolean}   right - Indicating collide with any object on the right.
-    * @param {boolean}   up - Indicating collide with any object on the top.
-    * @param {boolean}   down - Indicating collide with any object on the bottom.
-    * @param {boolean}   reset - Description. 
-    * @param {boolean}   separateX - Separate at x-axis.
-    * @param {boolean}   separateY - Separate at y-axis.
+    * Set collision settings on this tile.
+    * @method Phaser.Tile#setCollision
+    * @param {boolean} left - Indicating collide with any object on the left.
+    * @param {boolean} right - Indicating collide with any object on the right.
+    * @param {boolean} up - Indicating collide with any object on the top.
+    * @param {boolean} down - Indicating collide with any object on the bottom.
     */
     setCollision: function (left, right, up, down) {
 
@@ -171,7 +167,7 @@ Phaser.Tile.prototype = {
 
     /**
     * Reset collision status flags.
-    * @method resetCollision
+    * @method Phaser.Tile#resetCollision
     */
     resetCollision: function () {
 
@@ -185,27 +181,26 @@ Phaser.Tile.prototype = {
 
 };
 
+/**
+* @name Phaser.Tile#bottom
+* @property {number} bottom - The sum of the y and height properties.
+* @readonly
+*/
 Object.defineProperty(Phaser.Tile.prototype, "bottom", {
     
-    /**
-    * The sum of the y and height properties. Changing the bottom property of a Rectangle object has no effect on the x, y and width properties, but does change the height property.
-    * @method bottom
-    * @return {number}
-    **/
     get: function () {
         return this.y + this.height;
     }
 
 });
 
+/**
+* @name Phaser.Tile#right
+* @property {number} right - The sum of the x and width properties.
+* @readonly
+*/
 Object.defineProperty(Phaser.Tile.prototype, "right", {
     
-    /**
-    * The sum of the x and width properties. Changing the right property of a Rectangle object has no effect on the x, y and height properties.
-    * However it does affect the width property.
-    * @method right
-    * @return {number}
-    **/    
     get: function () {
         return this.x + this.width;
     }

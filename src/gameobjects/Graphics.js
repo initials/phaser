@@ -5,7 +5,7 @@
 */
 
 /**
-* Creates a new <code>Graphics</code> object.
+* Creates a new `Graphics` object.
 * 
 * @class Phaser.Graphics
 * @constructor
@@ -21,19 +21,20 @@ Phaser.Graphics = function (game, x, y) {
     PIXI.Graphics.call(this);
 
     /**
-	* @property {Description} type - Description.
+    * @property {number} type - The Phaser Object Type.
 	*/
     this.type = Phaser.GRAPHICS;
+
+    this.position.x = x;
+    this.position.y = y;
 
 };
 
 Phaser.Graphics.prototype = Object.create(PIXI.Graphics.prototype);
 Phaser.Graphics.prototype.constructor = Phaser.Graphics;
 
-//  Add our own custom methods
-
 /**
-* Description.
+* Destroy this Graphics instance.
 * 
 * @method Phaser.Sprite.prototype.destroy
 */
@@ -48,6 +49,22 @@ Phaser.Graphics.prototype.destroy = function() {
 
     this.game = null;
 
+}
+
+/*
+* Draws a {Phaser.Polygon} or a {PIXI.Polygon} filled
+*/
+Phaser.Graphics.prototype.drawPolygon = function (poly) {
+
+    this.moveTo(poly.points[0].x, poly.points[0].y);
+
+    for (var i = 1; i < poly.points.length; i += 1)
+    {
+        this.lineTo(poly.points[i].x, poly.points[i].y);
+    }
+
+    this.lineTo(poly.points[0].x, poly.points[0].y);
+    
 }
 
 Object.defineProperty(Phaser.Graphics.prototype, 'angle', {

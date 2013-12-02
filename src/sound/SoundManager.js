@@ -6,6 +6,8 @@
 
 /**
 * Sound Manager constructor.
+* The Sound Manager is responsible for playing back audio via either the Legacy HTML Audio tag or via Web Audio if the browser supports it.
+* Note: On Firefox 25+ on Linux if you have media.gstreamer disabled in about:config then it cannot play back mp3 or m4a files.
 *
 * @class Phaser.SoundManager
 * @classdesc Phaser Sound Manager.
@@ -14,28 +16,28 @@
 */
 Phaser.SoundManager = function (game) {
 
-	/**
-	* @property {Phaser.Game} game - Local reference to game.
-	*/
-	this.game = game;
-	
-	/**
-	* @property {Phaser.Signal} onSoundDecode - Description.
-	*/
-	this.onSoundDecode = new Phaser.Signal;
-	
-	/**
-	* @property {boolean} _muted - Description.
-	* @private
-	* @default
-	*/
+    /**
+    * @property {Phaser.Game} game - Local reference to game.
+    */
+    this.game = game;
+    
+    /**
+    * @property {Phaser.Signal} onSoundDecode - The event dispatched when a sound decodes (typically only for mp3 files)
+    */
+    this.onSoundDecode = new Phaser.Signal();
+    
+    /**
+    * @property {boolean} _muted - Internal mute tracking var.
+    * @private
+    * @default
+    */
     this._muted = false;
    
-	/**
-	* @property {Description} _unlockSource - Description.
-	* @private
-	* @default
-	*/
+    /**
+    * @property {Description} _unlockSource - Internal unlock tracking var.
+    * @private
+    * @default
+    */
     this._unlockSource = null;
 
     /**
@@ -53,41 +55,47 @@ Phaser.SoundManager = function (game) {
     this._sounds = [];
 
     /**
-    * @property {Description} context - Description. 
+    * @property {AudioContext} context - The AudioContext being used for playback.
     * @default
     */
     this.context = null;
     
-	/**
-	* @property {boolean} usingWebAudio - Description.
-	* @default
-	*/
+    /**
+    * @property {boolean} usingWebAudio - true if this sound is being played with Web Audio.
+    * @readonly
+    */
     this.usingWebAudio = true;
     
-	/**
-	* @property {boolean} usingAudioTag - Description.
-	* @default
-	*/
+    /**
+    * @property {boolean} usingAudioTag - true if the sound is being played via the Audio tag.
+    * @readonly
+    */
     this.usingAudioTag = false;
     
-	/**
-	* @property {boolean} noAudio - Description.
-	* @default
-	*/
+    /**
+    * @property {boolean} noAudio - Has audio been disabled via the PhaserGlobal object? Useful if you need to use a 3rd party audio library instead.
+    * @default
+    */
     this.noAudio = false;
 
-	/**
-	* @property {boolean} touchLocked - Description.
-	* @default
-	*/
+    /**
+    * @property {boolean} connectToMaster - Used in conjunction with Sound.externalNode this allows you to stop a Sound node being connected to the SoundManager master gain node.
+    * @default
+    */
+    this.connectToMaster = true;
+
+    /**
+    * @property {boolean} touchLocked - true if the audio system is currently locked awaiting a touch event.
+    * @default
+    */
     this.touchLocked = false;
 
-	/**
-	* @property {number} channels - Description.
-	* @default
-	*/
+    /**
+    * @property {number} channels - The number of audio channels to use in playback.
+    * @default
+    */
     this.channels = 32;
-	
+    
 };
 
 Phaser.SoundManager.prototype = {
@@ -99,7 +107,7 @@ Phaser.SoundManager.prototype = {
     */
     boot: function () {
 
-        if (this.game.device.iOS && this.game.device.webAudio == false)
+        if (this.game.device.iOS && this.game.device.webAudio === false)
         {
             this.channels = 1;
         }
@@ -121,7 +129,7 @@ Phaser.SoundManager.prototype = {
         if (window['PhaserGlobal'])
         {
             //  Check to see if all audio playback is disabled (i.e. handled by a 3rd party class)
-            if (window['PhaserGlobal'].disableAudio == true)
+            if (window['PhaserGlobal'].disableAudio === true)
             {
                 this.usingWebAudio = false;
                 this.noAudio = true;
@@ -129,7 +137,7 @@ Phaser.SoundManager.prototype = {
             }
 
             //  Check if the Web Audio API is disabled (for testing Audio Tag playback during development)
-            if (window['PhaserGlobal'].disableWebAudio == true)
+            if (window['PhaserGlobal'].disableWebAudio === true)
             {
                 this.usingWebAudio = false;
                 this.usingAudioTag = true;
@@ -172,7 +180,6 @@ Phaser.SoundManager.prototype = {
             this.masterGain.connect(this.context.destination);
         }
 
-
     },
 
     /**
@@ -181,13 +188,13 @@ Phaser.SoundManager.prototype = {
     */
     unlock: function () {
 
-        if (this.touchLocked == false)
+        if (this.touchLocked === false)
         {
             return;
         }
 
         //  Global override (mostly for Audio Tag testing)
-        if (this.game.device.webAudio == false || (window['PhaserGlobal'] && window['PhaserGlobal'].disableWebAudio == true))
+        if (this.game.device.webAudio === false || (window['PhaserGlobal'] && window['PhaserGlobal'].disableWebAudio === true))
         {
             //  Create an Audio tag?
             this.touchLocked = false;
@@ -255,9 +262,9 @@ Phaser.SoundManager.prototype = {
             }
         }
    
-	},
+    },
 
-	/**
+    /**
     * Decode a sound by its assets key.
     * @method Phaser.SoundManager#decode
     * @param {string} key - Assets key of the sound to be decoded.
@@ -322,15 +329,39 @@ Phaser.SoundManager.prototype = {
     * @param {string} key - Asset key for the sound.
     * @param {number} [volume=1] - Default value for the volume.
     * @param {boolean} [loop=false] - Whether or not the sound will loop.
+    * @param {boolean} [connect=true] - Controls if the created Sound object will connect to the master gainNode of the SoundManager when running under WebAudio.
+    * @return {Phaser.Sound} The new sound instance.
     */
-    add: function (key, volume, loop) {
+    add: function (key, volume, loop, connect) {
 
-    	volume = volume || 1;
-    	if (typeof loop == 'undefined') { loop = false; }
+        if (typeof volume === 'undefined') { volume = 1; }
+        if (typeof loop === 'undefined') { loop = false; }
+        if (typeof connect === 'undefined') { connect = this.connectToMaster; }
 
-        var sound = new Phaser.Sound(this.game, key, volume, loop);
+        var sound = new Phaser.Sound(this.game, key, volume, loop, connect);
 
         this._sounds.push(sound);
+
+        return sound;
+
+    },
+
+    /**
+    * Adds a new Sound into the SoundManager and starts it playing.
+    * @method Phaser.SoundManager#play
+    * @param {string} key - Asset key for the sound.
+    * @param {number} [volume=1] - Default value for the volume.
+    * @param {boolean} [loop=false] - Whether or not the sound will loop.
+    * @param {boolean} [destroyOnComplete=false] - If true the Sound will destroy itself once it has finished playing, or is stopped.
+    * @return {Phaser.Sound} The new sound instance.
+    */
+    play: function (key, volume, loop, destroyOnComplete) {
+
+        if (typeof destroyOnComplete == 'undefined') { destroyOnComplete = false; }
+
+        var sound = this.add(key, volume, loop);
+
+        sound.play();
 
         return sound;
 
@@ -380,7 +411,7 @@ Object.defineProperty(Phaser.SoundManager.prototype, "mute", {
         }
         else
         {
-            if (this._muted == false)
+            if (this._muted === false)
             {
                 return;
             }

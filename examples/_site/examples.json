@@ -149,6 +149,10 @@
   ],
   "display": [
     {
+      "file": "bitmapdata+wobble.js",
+      "title": "bitmapdata wobble"
+    },
+    {
       "file": "fullscreen.js",
       "title": "fullscreen"
     },
@@ -159,6 +163,48 @@
     {
       "file": "render+crisp.js",
       "title": "render crisp"
+    },
+    {
+      "file": "render+texture+mirror.js",
+      "title": "render texture mirror"
+    },
+    {
+      "file": "render+texture+starfield.js",
+      "title": "render texture starfield"
+    },
+    {
+      "file": "render+texture+trail.js",
+      "title": "render texture trail"
+    }
+  ],
+  "filters": [
+    {
+      "file": "blur.js",
+      "title": "blur"
+    },
+    {
+      "file": "checker+wave.js",
+      "title": "checker wave"
+    },
+    {
+      "file": "fire.js",
+      "title": "fire"
+    },
+    {
+      "file": "lightbeams.js",
+      "title": "lightbeams"
+    },
+    {
+      "file": "marble.js",
+      "title": "marble"
+    },
+    {
+      "file": "plasma.js",
+      "title": "plasma"
+    },
+    {
+      "file": "tunnel.js",
+      "title": "tunnel"
     }
   ],
   "games": [
@@ -227,8 +273,16 @@
       "title": "create sprite in a group"
     },
     {
+      "file": "depth+sort.js",
+      "title": "depth sort"
+    },
+    {
       "file": "display+order.js",
       "title": "display order"
+    },
+    {
+      "file": "extending+a+group.js",
+      "title": "extending a group"
     },
     {
       "file": "for+each.js",
@@ -358,6 +412,38 @@
     }
   ],
   "loader": [
+    {
+      "file": "load+audio.js",
+      "title": "load audio"
+    },
+    {
+      "file": "load+bitmap+font.js",
+      "title": "load bitmap font"
+    },
+    {
+      "file": "load+image.js",
+      "title": "load image"
+    },
+    {
+      "file": "load+spritesheet.js",
+      "title": "load spritesheet"
+    },
+    {
+      "file": "load+starling+atlas.js",
+      "title": "load starling atlas"
+    },
+    {
+      "file": "load+text+file.js",
+      "title": "load text file"
+    },
+    {
+      "file": "load+texture+atlas.js",
+      "title": "load texture atlas"
+    },
+    {
+      "file": "load+tilemap+json.js",
+      "title": "load tilemap json"
+    },
     {
       "file": "pick+images+from+cache.js",
       "title": "pick images from cache"

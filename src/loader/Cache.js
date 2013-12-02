@@ -16,44 +16,44 @@
 Phaser.Cache = function (game) {
 
     /**
-	* @property {Phaser.Game} game - Local reference to game.
-	*/
-	this.game = game;
+    * @property {Phaser.Game} game - Local reference to game.
+    */
+    this.game = game;
 
-	/**
-	* @property {object} game - Canvas key-value container.
-	* @private
-	*/
+    /**
+    * @property {object} game - Canvas key-value container.
+    * @private
+    */
     this._canvases = {};
 
     /**
-	* @property {object} _images - Image key-value container.
-	* @private
-	*/
+    * @property {object} _images - Image key-value container.
+    * @private
+    */
     this._images = {};
 
     /**
-	* @property {object} _textures - RenderTexture key-value container.
-	* @private
-	*/
+    * @property {object} _textures - RenderTexture key-value container.
+    * @private
+    */
     this._textures = {};
 
     /**
-	* @property {object} _sounds - Sound key-value container.
-	* @private
-	*/
+    * @property {object} _sounds - Sound key-value container.
+    * @private
+    */
     this._sounds = {};
 
     /**
-	* @property {object} _text - Text key-value container.
-	* @private
-	*/
+    * @property {object} _text - Text key-value container.
+    * @private
+    */
     this._text = {};
 
     /**
-	* @property {object} _tilemaps - Tilemap key-value container.
-	* @private
-	*/
+    * @property {object} _tilemaps - Tilemap key-value container.
+    * @private
+    */
     this._tilemaps = {};
 
     /**
@@ -62,12 +62,19 @@ Phaser.Cache = function (game) {
     */
     this._tilesets = {};
 
+    /**
+    * @property {object} _bitmapDatas - BitmapData key-value container.
+    * @private
+    */
+    this._bitmapDatas = {};
+
     this.addDefaultImage();
+    this.addMissingImage();
 
     /**
-	* @property {Phaser.Signal} onSoundUnlock - Description.
-	*/
-    this.onSoundUnlock = new Phaser.Signal;
+    * @property {Phaser.Signal} onSoundUnlock - This event is dispatched when the sound system is unlocked via a touch event on cellular devices.
+    */
+    this.onSoundUnlock = new Phaser.Signal();
 
 };
 
@@ -87,11 +94,26 @@ Phaser.Cache.prototype = {
     },
 
     /**
+    * Add a BitmapData object in to the cache.
+    * @method Phaser.Cache#addBitmapData
+    * @param {string} key - Asset key for this BitmapData.
+    * @param {Phaser.BitmapData} bitmapData - The BitmapData object to be addded to the cache.
+    * @return {Phaser.BitmapData} The BitmapData object to be addded to the cache.
+    */
+    addBitmapData: function (key, bitmapData) {
+
+        this._bitmapDatas[key] = bitmapData;
+
+        return bitmapData;
+
+    },
+
+    /**
     * Add a new Phaser.RenderTexture in to the cache.
     *
     * @method Phaser.Cache#addRenderTexture
     * @param {string} key - The unique key by which you will reference this object.
-    * @param {Phaser.Texture} textue - The texture to use as the base of the RenderTexture.
+    * @param {Phaser.Texture} texture - The texture to use as the base of the RenderTexture.
     */
     addRenderTexture: function (key, texture) {
 
@@ -218,14 +240,14 @@ Phaser.Cache.prototype = {
     },
 
     /**
-    * Adds a default image to be used when a key is wrong / missing. Is mapped to the key __default.
+    * Adds a default image to be used in special cases such as WebGL Filters. Is mapped to the key __default.
     *
     * @method Phaser.Cache#addDefaultImage
     */
     addDefaultImage: function () {
 
         var img = new Image();
-        img.src = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAIAAAD8GO2jAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAJ9JREFUeNq01ssOwyAMRFG46v//Mt1ESmgh+DFmE2GPOBARKb2NVjo+17PXLD8a1+pl5+A+wSgFygymWYHBb0FtsKhJDdZlncG2IzJ4ayoMDv20wTmSMzClEgbWYNTAkQ0Z+OJ+A/eWnAaR9+oxCF4Os0H8htsMUp+pwcgBBiMNnAwF8GqIgL2hAzaGFFgZauDPKABmowZ4GL369/0rwACp2yA/ttmvsQAAAABJRU5ErkJggg==";
+        img.src = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgAQMAAABJtOi3AAAAA1BMVEX///+nxBvIAAAAAXRSTlMAQObYZgAAABVJREFUeF7NwIEAAAAAgKD9qdeocAMAoAABm3DkcAAAAABJRU5ErkJggg==";
 
         this._images['__default'] = { url: null, data: img, spriteSheet: false };
         this._images['__default'].frame = new Phaser.Frame(0, 0, 0, 32, 32, '', '');
@@ -236,13 +258,31 @@ Phaser.Cache.prototype = {
     },
 
     /**
+    * Adds an image to be used when a key is wrong / missing. Is mapped to the key __missing.
+    *
+    * @method Phaser.Cache#addMissingImage
+    */
+    addMissingImage: function () {
+
+        var img = new Image();
+        img.src = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAIAAAD8GO2jAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAJ9JREFUeNq01ssOwyAMRFG46v//Mt1ESmgh+DFmE2GPOBARKb2NVjo+17PXLD8a1+pl5+A+wSgFygymWYHBb0FtsKhJDdZlncG2IzJ4ayoMDv20wTmSMzClEgbWYNTAkQ0Z+OJ+A/eWnAaR9+oxCF4Os0H8htsMUp+pwcgBBiMNnAwF8GqIgL2hAzaGFFgZauDPKABmowZ4GL369/0rwACp2yA/ttmvsQAAAABJRU5ErkJggg==";
+
+        this._images['__missing'] = { url: null, data: img, spriteSheet: false };
+        this._images['__missing'].frame = new Phaser.Frame(0, 0, 0, 32, 32, '', '');
+
+        PIXI.BaseTextureCache['__missing'] = new PIXI.BaseTexture(img);
+        PIXI.TextureCache['__missing'] = new PIXI.Texture(PIXI.BaseTextureCache['__missing']);
+
+    },
+
+    /**
     * Add a new text data.
     *
     * @method Phaser.Cache#addText
     * @param {string} key - Asset key for the text data. 
     * @param {string} url - URL of this text data file.
     * @param {object} data - Extra text data.
-    */    
+    */
     addText: function (key, url, data) {
 
         this._text[key] = {
@@ -286,7 +326,6 @@ Phaser.Cache.prototype = {
         webAudio = webAudio || true;
         audioTag = audioTag || false;
 
-        var locked = this.game.sound.touchLocked;
         var decoded = false;
 
         if (audioTag)
@@ -348,13 +387,13 @@ Phaser.Cache.prototype = {
 
     },
 
-	/**
-	* Add a new decoded sound.
+    /**
+    * Add a new decoded sound.
     *
     * @method Phaser.Cache#decodedSound
-	* @param {string} key - Asset key for the sound.
-	* @param {object} data - Extra sound data.
-	*/
+    * @param {string} key - Asset key for the sound.
+    * @param {object} data - Extra sound data.
+    */
     decodedSound: function (key, data) {
 
         this._sounds[key].data = data;
@@ -363,13 +402,13 @@ Phaser.Cache.prototype = {
 
     },
 
-	/**
-	* Get acanvas object from the cache by its key.
+    /**
+    * Get a canvas object from the cache by its key.
     *
     * @method Phaser.Cache#getCanvas
-	* @param {string} key - Asset key of the canvas you want.
-	* @return {object} The canvas you want.
-	*/
+    * @param {string} key - Asset key of the canvas you want.
+    * @return {object} The canvas you want.
+    */
     getCanvas: function (key) {
 
         if (this._canvases[key])
@@ -378,6 +417,25 @@ Phaser.Cache.prototype = {
         }
 
         return null;
+
+    },
+
+    /**
+    * Get a BitmapData object from the cache by its key.
+    *
+    * @method Phaser.Cache#getBitmapData
+    * @param {string} key - Asset key of the BitmapData object you want.
+    * @return {Phaser.BitmapData} The requested BitmapData object if found, or null if not.
+    */
+    getBitmapData: function (key) {
+
+        if (this._bitmapDatas[key])
+        {
+            return this._bitmapDatas[key];
+        }
+
+        return null;
+
     },
 
     /**
@@ -386,7 +444,7 @@ Phaser.Cache.prototype = {
     * @method Phaser.Cache#checkImageKey
     * @param {string} key - Asset key of the image you want.
     * @return {boolean} True if the key exists, otherwise false.
-    */    
+    */
     checkImageKey: function (key) {
 
         if (this._images[key])
@@ -398,13 +456,13 @@ Phaser.Cache.prototype = {
 
     },
 
-	/**
-	* Get image data by key.
+    /**
+    * Get image data by key.
     *
     * @method Phaser.Cache#getImage
-	* @param {string} key - Asset key of the image you want.
-	* @return {object} The image data you want.
-	*/    
+    * @param {string} key - Asset key of the image you want.
+    * @return {object} The image data you want.
+    */
     getImage: function (key) {
 
         if (this._images[key])
@@ -413,6 +471,7 @@ Phaser.Cache.prototype = {
         }
 
         return null;
+
     },
 
     /**
@@ -421,7 +480,7 @@ Phaser.Cache.prototype = {
     * @method Phaser.Cache#getTileSetImage
     * @param {string} key - Asset key of the image you want.
     * @return {object} The image data you want.
-    */    
+    */
     getTilesetImage: function (key) {
 
         if (this._tilesets[key])
@@ -439,7 +498,7 @@ Phaser.Cache.prototype = {
     * @method Phaser.Cache#getTileset
     * @param {string} key - Asset key of the image you want.
     * @return {Phaser.Tileset} The tileset data. The tileset image is in the data property, the tile data in tileData.
-    */    
+    */
     getTileset: function (key) {
 
         if (this._tilesets[key])
@@ -468,13 +527,13 @@ Phaser.Cache.prototype = {
         return null;
     },
 
-	/**
-	* Get frame data by key.
+    /**
+    * Get frame data by key.
     *
     * @method Phaser.Cache#getFrameData
-	* @param {string} key - Asset key of the frame data you want.
-	* @return {Phaser.FrameData} The frame data you want.
-	*/
+    * @param {string} key - Asset key of the frame data you want.
+    * @return {Phaser.FrameData} The frame data you want.
+    */
     getFrameData: function (key) {
 
         if (this._images[key] && this._images[key].frameData)
@@ -528,7 +587,7 @@ Phaser.Cache.prototype = {
     */
     getFrame: function (key) {
 
-        if (this._images[key] && this._images[key].spriteSheet == false)
+        if (this._images[key] && this._images[key].spriteSheet === false)
         {
             return this._images[key].frame;
         }
@@ -571,13 +630,13 @@ Phaser.Cache.prototype = {
 
     },
 
-	/**
-	* Get sound by key.
+    /**
+    * Get sound by key.
     *
     * @method Phaser.Cache#getSound
-	* @param {string} key - Asset key of the sound you want.
-	* @return {Phaser.Sound} The sound you want.
-	*/
+    * @param {string} key - Asset key of the sound you want.
+    * @return {Phaser.Sound} The sound you want.
+    */
     getSound: function (key) {
 
         if (this._sounds[key])
@@ -589,13 +648,13 @@ Phaser.Cache.prototype = {
 
     },
 
-	/**
-	* Get sound data by key.
+    /**
+    * Get sound data by key.
     *
     * @method Phaser.Cache#getSoundData
-	* @param {string} key - Asset key of the sound you want.
-	* @return {object} The sound data you want.
-	*/
+    * @param {string} key - Asset key of the sound you want.
+    * @return {object} The sound data you want.
+    */
     getSoundData: function (key) {
 
         if (this._sounds[key])
@@ -607,13 +666,13 @@ Phaser.Cache.prototype = {
 
     },
 
-	/**
-	* Check if the given sound has finished decoding.
+    /**
+    * Check if the given sound has finished decoding.
     *
     * @method Phaser.Cache#isSoundDecoded
-	* @param {string} key - Asset key of the sound you want.
-	* @return {boolean} The decoded state of the Sound object.
-	*/
+    * @param {string} key - Asset key of the sound you want.
+    * @return {boolean} The decoded state of the Sound object.
+    */
     isSoundDecoded: function (key) {
 
         if (this._sounds[key])
@@ -623,26 +682,26 @@ Phaser.Cache.prototype = {
 
     },
 
-	/**
-	* Check if the given sound is ready for playback. A sound is considered ready when it has finished decoding and the device is no longer touch locked.
+    /**
+    * Check if the given sound is ready for playback. A sound is considered ready when it has finished decoding and the device is no longer touch locked.
     *
     * @method Phaser.Cache#isSoundReady
-	* @param {string} key - Asset key of the sound you want.
-	* @return {boolean} True if the sound is decoded and the device is not touch locked.
-	*/
+    * @param {string} key - Asset key of the sound you want.
+    * @return {boolean} True if the sound is decoded and the device is not touch locked.
+    */
     isSoundReady: function (key) {
 
-        return (this._sounds[key] && this._sounds[key].decoded && this.game.sound.touchLocked == false);
+        return (this._sounds[key] && this._sounds[key].decoded && this.game.sound.touchLocked === false);
 
     },
 
-	/**
-	* Check whether an image asset is sprite sheet or not.
+    /**
+    * Check whether an image asset is sprite sheet or not.
     *
     * @method Phaser.Cache#isSpriteSheet
-	* @param {string} key - Asset key of the sprite sheet you want.
-	* @return {boolean} True if the image is a sprite sheet.
-	*/
+    * @param {string} key - Asset key of the sprite sheet you want.
+    * @return {boolean} True if the image is a sprite sheet.
+    */
     isSpriteSheet: function (key) {
 
         if (this._images[key])
@@ -654,13 +713,13 @@ Phaser.Cache.prototype = {
 
     },
 
-	/**
-	* Get text data by key.
+    /**
+    * Get text data by key.
     *
     * @method Phaser.Cache#getText
-	* @param {string} key - Asset key of the text data you want.
-	* @return {object} The text data you want.
-	*/
+    * @param {string} key - Asset key of the text data you want.
+    * @return {object} The text data you want.
+    */
     getText: function (key) {
 
         if (this._text[key])
@@ -696,42 +755,42 @@ Phaser.Cache.prototype = {
 
     },
 
-	/**
-	* Returns an array containing all of the keys of Images in the Cache.
+    /**
+    * Returns an array containing all of the keys of Images in the Cache.
     *
     * @method Phaser.Cache#getImageKeys
-	* @return {Array} The string based keys in the Cache.
-	*/
+    * @return {Array} The string based keys in the Cache.
+    */
     getImageKeys: function () {
-    	return this.getKeys(this._images);
+        return this.getKeys(this._images);
     },
 
-	/**
-	* Returns an array containing all of the keys of Sounds in the Cache.
+    /**
+    * Returns an array containing all of the keys of Sounds in the Cache.
     *
     * @method Phaser.Cache#getSoundKeys
-	* @return {Array} The string based keys in the Cache.
-	*/
+    * @return {Array} The string based keys in the Cache.
+    */
     getSoundKeys: function () {
-    	return this.getKeys(this._sounds);
+        return this.getKeys(this._sounds);
     },
 
-	/**
-	* Returns an array containing all of the keys of Text Files in the Cache.
+    /**
+    * Returns an array containing all of the keys of Text Files in the Cache.
     *
     * @method Phaser.Cache#getTextKeys
-	* @return {Array} The string based keys in the Cache.
-	*/
+    * @return {Array} The string based keys in the Cache.
+    */
     getTextKeys: function () {
-    	return this.getKeys(this._text);
+        return this.getKeys(this._text);
     },
 
-	/**
-	* Removes a canvas from the cache.
+    /**
+    * Removes a canvas from the cache.
     *
-	* @method Phaser.Cache#removeCanvas
+    * @method Phaser.Cache#removeCanvas
     * @param {string} key - Key of the asset you want to remove.
-	*/
+    */
     removeCanvas: function (key) {
         delete this._canvases[key];
     },
@@ -766,11 +825,11 @@ Phaser.Cache.prototype = {
         delete this._text[key];
     },
 
-	/**
-	* Clears the cache. Removes every local cache object reference.
+    /**
+    * Clears the cache. Removes every local cache object reference.
     *
-	* @method Phaser.Cache#destroy
-	*/
+    * @method Phaser.Cache#destroy
+    */
     destroy: function () {
 
         for (var item in this._canvases)

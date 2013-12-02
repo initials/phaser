@@ -26,9 +26,9 @@ PIXI.Sprite = function(texture)
 	 * Setting than anchor to 0.5,0.5 means the textures origin is centered
 	 * Setting the anchor to 1,1 would mean the textures origin points will be the bottom right
 	 *
-     * @property anchor
-     * @type Point
-     */
+    * @property anchor
+    * @type Point
+    */
 	this.anchor = new PIXI.Point();
 
 	/**
@@ -152,7 +152,7 @@ PIXI.Sprite.prototype.setTexture = function(texture)
 PIXI.Sprite.prototype.onTextureUpdate = function(event)
 {
 	//this.texture.removeEventListener( 'update', this.onTextureUpdateBind );
-
+	
 	// so if _width is 0 then width was not set..
 	if(this._width)this.scale.x = this._width / this.texture.frame.width;
 	if(this._height)this.scale.y = this._height / this.texture.frame.height;
@@ -194,4 +194,3 @@ PIXI.Sprite.fromImage = function(imageId)
 	var texture = PIXI.Texture.fromImage(imageId);
 	return new PIXI.Sprite(texture);
 }
-

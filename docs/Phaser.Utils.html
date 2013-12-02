@@ -55,6 +55,10 @@
 						</li>
 						
 						<li>
+							<a href="Phaser.BitmapData.html">BitmapData</a>
+						</li>
+						
+						<li>
 							<a href="Phaser.BitmapText.html">BitmapText</a>
 						</li>
 						
@@ -136,6 +140,10 @@
 						
 						<li>
 							<a href="Phaser.Events.html">Events</a>
+						</li>
+						
+						<li>
+							<a href="Phaser.Filter.html">Filter</a>
 						</li>
 						
 						<li>
@@ -243,6 +251,10 @@
 						</li>
 						
 						<li>
+							<a href="Phaser.Polygon.html">Polygon</a>
+						</li>
+						
+						<li>
 							<a href="Phaser.QuadTree.html">QuadTree</a>
 						</li>
 						
@@ -299,11 +311,35 @@
 						</li>
 						
 						<li>
+							<a href="Phaser.Tile.html">Tile</a>
+						</li>
+						
+						<li>
+							<a href="Phaser.Tilemap.html">Tilemap</a>
+						</li>
+						
+						<li>
+							<a href="Phaser.TilemapLayer.html">TilemapLayer</a>
+						</li>
+						
+						<li>
+							<a href="Phaser.TilemapParser.html">TilemapParser</a>
+						</li>
+						
+						<li>
+							<a href="Phaser.Tileset.html">Tileset</a>
+						</li>
+						
+						<li>
 							<a href="Phaser.TileSprite.html">TileSprite</a>
 						</li>
 						
 						<li>
 							<a href="Phaser.Time.html">Time</a>
+						</li>
+						
+						<li>
+							<a href="Phaser.Timer.html">Timer</a>
 						</li>
 						
 						<li>
@@ -350,6 +386,14 @@
 						
 						<li>
 							<a href="global.html#HEXtoRGB">HEXtoRGB</a>
+						</li>
+						
+						<li>
+							<a href="global.html#render">render</a>
+						</li>
+						
+						<li>
+							<a href="global.html#renderXY">renderXY</a>
 						</li>
 						
 						<li>
@@ -429,7 +473,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="Utils.js.html">utils/Utils.js</a>, <a href="Utils.js.html#sunlight-1-line-3">line 3</a>
+        <a href="Utils.js.html">utils/Utils.js</a>, <a href="Utils.js.html#sunlight-1-line-5">line 5</a>
     </li></ul></dd>
     
 
@@ -595,7 +639,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="Utils.js.html">utils/Utils.js</a>, <a href="Utils.js.html#sunlight-1-line-110">line 110</a>
+        <a href="Utils.js.html">utils/Utils.js</a>, <a href="Utils.js.html#sunlight-1-line-120">line 120</a>
     </li></ul></dd>
     
 
@@ -736,7 +780,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="Utils.js.html">utils/Utils.js</a>, <a href="Utils.js.html#sunlight-1-line-68">line 68</a>
+        <a href="Utils.js.html">utils/Utils.js</a>, <a href="Utils.js.html#sunlight-1-line-78">line 78</a>
     </li></ul></dd>
     
 
@@ -798,7 +842,7 @@
     
     <div class="description">
         <p>Javascript string pad <a href="http://www.webtoolkit.info/">http://www.webtoolkit.info/</a>.
-pad = the string to pad it out with (defaults to a space)&lt;br&gt;
+pad = the string to pad it out with (defaults to a space)
 dir = 1 (left), 2 (right), 3 (both)</p>
     </div>
     
@@ -1006,7 +1050,7 @@ dir = 1 (left), 2 (right), 3 (both)</p>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="Utils.js.html">utils/Utils.js</a>, <a href="Utils.js.html#sunlight-1-line-27">line 27</a>
+        <a href="Utils.js.html">utils/Utils.js</a>, <a href="Utils.js.html#sunlight-1-line-35">line 35</a>
     </li></ul></dd>
     
 
@@ -1030,6 +1074,10 @@ dir = 1 (left), 2 (right), 3 (both)</p>
     <h5>Returns:</h5>
     
             
+<div class="param-desc">
+    <p>The padded string</p>
+</div>
+
 
 
 <dl>
@@ -1039,6 +1087,147 @@ dir = 1 (left), 2 (right), 3 (both)</p>
 	<dd>
 		
 <span class="param-type">string</span>
+
+
+	</dd>
+</dl>
+
+
+        
+    
+    
+</dd>
+
+        
+            
+<dt>
+    <h4 class="name" id="shuffle"><span class="type-signature">&lt;static> </span>shuffle<span class="signature">(array)</span><span class="type-signature"> &rarr; {array}</span></h4>
+    
+    
+</dt>
+<dd>
+    
+    
+    <div class="description">
+        <p>A standard Fisher-Yates Array shuffle implementation.</p>
+    </div>
+    
+
+    
+    
+    
+    
+    
+        <h5>Parameters:</h5>
+        
+
+<table class="params table table-striped">
+    <thead>
+	<tr>
+		
+		<th>Name</th>
+		
+
+		<th>Type</th>
+
+		
+
+		
+
+		<th class="last">Description</th>
+	</tr>
+	</thead>
+
+	<tbody>
+	
+
+        <tr>
+            
+                <td class="name"><code>array</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">array</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>The array to shuffle.</p></td>
+        </tr>
+
+	
+	</tbody>
+</table>
+
+    
+    
+    
+<dl class="details">
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="Utils.js.html">utils/Utils.js</a>, <a href="Utils.js.html#sunlight-1-line-15">line 15</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+    
+    
+
+    
+
+    
+    
+    
+    
+    
+    <h5>Returns:</h5>
+    
+            
+<div class="param-desc">
+    <p>The shuffled array.</p>
+</div>
+
+
+
+<dl>
+	<dt>
+		Type
+	</dt>
+	<dd>
+		
+<span class="param-type">array</span>
 
 
 	</dd>
@@ -1076,7 +1265,7 @@ dir = 1 (left), 2 (right), 3 (both)</p>
 					
 		<span class="jsdoc-message">
 		Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.3.0-dev</a>
-		on Fri Nov 01 2013 18:16:16 GMT-0000 (GMT) using the <a href="https://github.com/terryweiss/docstrap">DocStrap template</a>.
+		on Thu Nov 28 2013 15:56:35 GMT-0000 (GMT) using the <a href="https://github.com/terryweiss/docstrap">DocStrap template</a>.
 		</span>
 				</footer>
 			</div>
